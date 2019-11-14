@@ -1,0 +1,5 @@
+
+Ysquid:S2696,"6Make the enclosing method "static" or remove this set.(€¹ğÆÿÿÿÿÿ8ÀúÈÚã-
+Xsquid:S2209,"5Change this instance-reference to a static reference.(€¹ğÆÿÿÿÿÿ8ÀúÈÚã-
+Ÿsquid:S1186""€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(û§õ¥8šˆ¸Úã-
+ysquid:S00120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ËÖğí8šˆ¸Úã-

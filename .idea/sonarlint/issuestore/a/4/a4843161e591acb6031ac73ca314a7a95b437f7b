@@ -1,0 +1,5 @@
+
+bsquid:S2147!"DCombine this catch with the one at line 31, which has the same body.(ï­£Ä8œ­¤¸ã-
+Fsquid:S1148 "#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8œ­¤¸ã-
+ysquid:S00120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(»¹šö8œ­¤¸ã-
+Fsquid:S1148""#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8œ­¤¸ã-
