@@ -1,5 +1,8 @@
 package com.moroz.logsearcher.model;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
@@ -9,6 +12,8 @@ import java.util.List;
 import java.util.concurrent.*;
 
 class ModelFileVisitor extends SimpleFileVisitor<Path> {
+
+    private static final Logger log = LogManager.getLogger(ModelImpl.class.getName());
 
     private ExecutorService service;
     private String searchText;
@@ -22,6 +27,9 @@ class ModelFileVisitor extends SimpleFileVisitor<Path> {
     private final List<FoundFile> foundFiles;
 
     ModelFileVisitor(String searchText, String filesType, Path root) {
+        log.trace("call constructor with searchText: "+searchText+" filesType: "+filesType+
+        " root: "+root);
+
         service = Executors.newCachedThreadPool(runnable -> {
             Thread thread = Executors.defaultThreadFactory().newThread(runnable);
             thread.setDaemon(true);
@@ -45,6 +53,7 @@ class ModelFileVisitor extends SimpleFileVisitor<Path> {
             Runnable task = () -> {
                 FoundFile foundFile = new SearchTextService().search(file, searchText);
                 if (foundFile != null) {
+                    log.trace("adding tree node for file: "+file);
                     addFileTreeNode(file);
                     synchronized (foundFiles) {
                         foundFiles.add(foundFile);

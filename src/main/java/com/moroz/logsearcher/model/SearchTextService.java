@@ -2,9 +2,10 @@ package com.moroz.logsearcher.model;
 
 import com.moroz.logsearcher.AppProperties;
 import javafx.util.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -14,6 +15,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class SearchTextService {
+
+    private static final Logger log = LogManager.getLogger(SearchTextService.class.getName());
 
     public FoundFile search(Path file, String searchText) {
         List<Long> partIndexes = new ArrayList<>();
@@ -44,10 +47,8 @@ class SearchTextService {
                 position += line.length()+2;
                 ++stringsCount;
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("exception at searching in file: "+file, e);
         }
 
         if(!foundTextIndexes.isEmpty()) {

@@ -109,4 +109,9 @@ public class FileTree {
             return Objects.hash(name);
         }
     }
+
+    @Override
+    public String toString() {
+        return "FileTree with root \""+root.getName()+"\"";
+    }
 }

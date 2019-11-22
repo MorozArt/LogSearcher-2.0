@@ -1,3 +1,4 @@
 
-Xsquid:S2209/"5Change this instance-reference to a static reference.(€¹ðÆÿÿÿÿÿ8èü½„ä-
-Ysquid:S2696/"6Make the enclosing method "static" or remove this set.(€¹ðÆÿÿÿÿÿ8èü½„ä-
+Xsquid:S22099"5Change this instance-reference to a static reference.(€¹ðÆÿÿÿÿÿ8èü½„ä-
+Ysquid:S26969"6Make the enclosing method "static" or remove this set.(€¹ðÆÿÿÿÿÿ8èü½„ä-
+nsquid:UselessImportCheck">Remove this unused import 'com.moroz.logsearcher.LogSearcher'.(ñº¢Æûÿÿÿÿ8 §Ý“é-

@@ -22,8 +22,12 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class FXViewController extends FXViewImpl {
+
+    private static final Logger log = LogManager.getLogger(FXViewController.class.getName());
 
     public FXViewController() {
         setFxViewController(this);
@@ -108,31 +112,40 @@ public class FXViewController extends FXViewImpl {
 
         if(dir != null) {
             pathToDirField.setText(dir.getAbsolutePath());
+            log.trace("openDirButtonHandler result dir: "+dir.getAbsolutePath());
+        } else {
+            log.trace("openDirButtonHandler result dir: null");
         }
     }
 
     @FXML
     private void findButtonHandler(ActionEvent event) {
         String pathToRootDir = pathToDirField.getText();
+        log.info("finding files in "+pathToRootDir);
+
         if(pathToRootDir == null || pathToRootDir.trim().isEmpty()) {
+            log.trace("findButtonHandler result: empty directory");
             showErrorMessage(AppProperties.getProperty("emptyDirectory"));
             return;
         }
 
         Path rootDir = Paths.get(pathToRootDir);
         if(!rootDir.toFile().exists()) {
+            log.trace("findButtonHandler result: invalid directory");
             showErrorMessage(AppProperties.getProperty("invalidDirectory"));
             return;
         }
 
         String searchText = searchTextField.getText();
         if(searchText == null || searchText.trim().isEmpty()) {
+            log.trace("findButtonHandler result: no search text");
             showErrorMessage(AppProperties.getProperty("noSearchText"));
             return;
         }
 
         String filesType = filesTypeField.getText();
         if(filesType == null || filesType.trim().isEmpty()) {
+            log.trace("findButtonHandler set filesType to \".log\"");
             filesType = "log";
         }
 
@@ -146,6 +159,8 @@ public class FXViewController extends FXViewImpl {
         fileTreeView.getSelectionModel().clearSelection();
 
         fileTreeView.setRoot(new TreeItem<>());
+        log.trace("call MvcController method \"find\" with rootDir: "+rootDir+" searchText: "+searchText+
+                        " filesType: "+filesType);
         getMvcController().find(rootDir, searchText, filesType);
         processImageView.setImage(load);
     }
@@ -166,6 +181,8 @@ public class FXViewController extends FXViewImpl {
         if (node instanceof Text || (node instanceof TreeCell && ((TreeCell) node).getText() != null)) {
             TreeItem<String> item = fileTreeView.getSelectionModel().getSelectedItem();
             if(item != null && item.isLeaf()) {
+                log.trace("click on node: "+item.getValue());
+
                 String path = item.getValue();
                 TreeItem<String> itemParent = item.getParent();
                 while (itemParent.getValue() != null) {
@@ -175,6 +192,7 @@ public class FXViewController extends FXViewImpl {
                 Path openedFile = Paths.get(path);
                 currentOpenFile = openedFile;
 
+                log.trace("call MvcController method \"openFile\" with: "+openedFile);
                 getMvcController().openFile(openedFile);
             }
         }
@@ -204,6 +222,8 @@ public class FXViewController extends FXViewImpl {
             prevPageButton.setDisable(true);
         }
 
+        log.trace("call MvcController method \"getOpenFilePart\" with currentOpenFile: "+currentOpenFile+
+                    " currentOpenFilePart: "+currentOpenFilePart);
         fileTextArea.setText(getMvcController().getOpenFilePart(currentOpenFile, currentOpenFilePart));
     }
 
@@ -228,6 +248,9 @@ public class FXViewController extends FXViewImpl {
     }
 
     public void openFile(String text, int filePartCount, List<Pair<Integer, Integer> > foundTextIndexes) {
+        log.trace("open file with filePartCount: "+filePartCount+
+                " foundTextIndexesCount: "+foundTextIndexes.size());
+
         fileTextArea.setText(text);
         openFilePartCount = filePartCount;
         currentOpenFilePart = 0;
@@ -249,6 +272,9 @@ public class FXViewController extends FXViewImpl {
         int highlightTextPart = foundTextIndexes.get(highlightIndex).getKey();
         int highlightStartPosition = foundTextIndexes.get(highlightIndex).getValue();
 
+        log.trace("set highlight with highlightIndex: "+highlightIndex+" highlightTextPart: "+highlightTextPart
+        +" highlightStartPosition: "+highlightStartPosition);
+
         if(highlightTextPart != currentOpenFilePart) {
             openFilePart(highlightTextPart);
         }
@@ -264,6 +290,8 @@ public class FXViewController extends FXViewImpl {
     }
 
     private void addNodeToTreeView(TreeItem<String> root, FileTree.Node node) {
+        log.trace("adding node \""+node.getName()+"\" to tree view");
+
         TreeItem<String> addedNode = new TreeItem<>(node.getName(), new ImageView(fileIcon));
         root.getChildren().add(addedNode);
 
